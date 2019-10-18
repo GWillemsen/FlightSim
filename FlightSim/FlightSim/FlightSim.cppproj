@@ -42,7 +42,7 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>custom</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
     <avrtoolserialnumber />
     <avrdeviceexpectedsignature>0x1E950F</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_simulator>
@@ -231,7 +231,52 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ADFDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ADFDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="AltitudeDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="AltitudeDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ArtficialHorizionDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ArtficialHorizionDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ClimbingDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ClimbingDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HeadingDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HeadingDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MeterBasis.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RPMDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RPMDisplay.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Sketch.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SpeedDisplay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SpeedDisplay.h">
       <SubType>compile</SubType>
     </Compile>
     <Content Include="readme.html">

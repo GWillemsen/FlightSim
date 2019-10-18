@@ -3,7 +3,7 @@
 	<generic>
 	<!-- 
 	Notes:
-		Names are purely astetics so you have extra info about the value. The name is not send with the output/input.
+		Names are purely aesthetics so you have extra info about the value. The name is not send with the output/input.
 		All floats are normalized between -1 and 1 if not otherwise specified.
 	-->
 		<input>

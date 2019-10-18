@@ -1,14 +1,30 @@
 ﻿/*Begining of Auto generated code by Atmel studio */
 #include <Arduino.h>
-
 /*End of auto generated code by Atmel studio */
 
+#include "ADFDisplay.h"
+#include "AltitudeDisplay.h"
+#include "ArtficialHorizionDisplay.h"
+#include "ClimbingDisplay.h"
+#include "HeadingDisplay.h"
+#include "RPMDisplay.h"
+#include "SpeedDisplay.h"
 
 // function prototypes
 void ReadSerialData();
 void ProcessingInputLines(String &data);
 void loop();
 void setup();
+
+// Display helpers
+ADFDisplay m_adfDisplay = ADFDisplay();
+AltitudeDisplay m_altitudeDisplay = AltitudeDisplay();
+ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 0);
+ClimbingDisplay m_climbingDisplay = ClimbingDisplay();
+HeadingDisplay m_headingDisplay = HeadingDisplay();
+RPMDisplay m_rpmDisplay = RPMDisplay();
+SpeedDisplay m_speedDisplay = SpeedDisplay(5);
+
 
 // FlightGear variables
 float throttle = 0;
@@ -18,14 +34,6 @@ bool rightWheelBrake = false;
 float flaps = 0;
 float ruder = 0;
 
-float speed = 0;
-float ahRoll = 0;
-float ahPitch = 0;
-float heading = 0;
-float altitude = 0;
-float climbing = 0;
-float adf = 0;
-float rpm = 0;
 
 float totalSeconds = 10;
 unsigned long endTimeRunning = millis() + (totalSeconds * 1000);
@@ -36,6 +44,8 @@ void setup() {
 	Serial.begin(19200);
 	Serial.println("Starting loop");
 	running = true;
+	m_speedDisplay.NextUpdateIsLongOfDuration();
+	m_ahDisplay.NextUpdateIsLongOfDuration();
 }
 
 void loop() {
@@ -65,8 +75,7 @@ void ReadSerialData()
 		// set read time to 1 ms, so we only read available data
 		Serial.setTimeout(1);
 		serialData += Serial.readString();
-		ProcessingInputLines(serialData);
-		
+		ProcessingInputLines(serialData);		
 		// reset serial read timeout back to the default
 		Serial.setTimeout(1000);
 	}	
@@ -90,21 +99,21 @@ void ProcessingInputLines(String &data)
 				// select the next property to update
 				float* toUpdateField;
 				if (partIndex == 0)
-					toUpdateField = &speed;
+					toUpdateField = &m_speedDisplay.m_knots;
 				else if (partIndex == 1)
-					toUpdateField = &ahRoll;
+					toUpdateField = &m_ahDisplay.m_rotation;
 				else if (partIndex == 2)
-					toUpdateField = &ahPitch;
+					toUpdateField = &m_ahDisplay.m_pitch;
 				else if (partIndex == 3)
-					toUpdateField = &heading;
+					toUpdateField = &m_headingDisplay.m_heading;
 				else if (partIndex == 4)
-					toUpdateField = &altitude;
+					toUpdateField = &m_altitudeDisplay.m_altitude;
 				else if (partIndex == 5)
-					toUpdateField = &climbing;
+					toUpdateField = &m_climbingDisplay.m_speed;
 				else if (partIndex == 6)
-					toUpdateField = &adf;
+					toUpdateField = &m_adfDisplay.m_heading;
 				else if(partIndex == 7)
-					toUpdateField = &rpm;
+					toUpdateField = &m_rpmDisplay.m_rpms;
 				
 				int nextSeparator = data.indexOf(",", startPos);
 				// if the input is terminated or a next line is also available
