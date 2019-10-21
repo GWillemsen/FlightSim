@@ -26,8 +26,6 @@ public:
 	void UpdateMeter();
 protected:
 private:
-	AltitudeDisplay( const AltitudeDisplay &c );
-	AltitudeDisplay& operator=( const AltitudeDisplay &c );
 
 }; //AltitudeDisplay
 

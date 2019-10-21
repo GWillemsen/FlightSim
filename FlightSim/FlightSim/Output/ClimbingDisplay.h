@@ -27,8 +27,6 @@ public:
 
 protected:
 private:
-	ClimbingDisplay( const ClimbingDisplay &c );
-	ClimbingDisplay& operator=( const ClimbingDisplay &c );
 }; //ClimbingMeter
 
 #endif //__CLIMBINGMETER_H__

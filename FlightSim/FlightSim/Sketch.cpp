@@ -2,21 +2,27 @@
 #include <Arduino.h>
 /*End of auto generated code by Atmel studio */
 
-#include "ADFDisplay.h"
-#include "AltitudeDisplay.h"
-#include "ArtficialHorizionDisplay.h"
-#include "ClimbingDisplay.h"
-#include "HeadingDisplay.h"
-#include "RPMDisplay.h"
-#include "SpeedDisplay.h"
+#include "Output/ADFDisplay.h"
+#include "Output/AltitudeDisplay.h"
+#include "Output/ArtficialHorizionDisplay.h"
+#include "Output/ClimbingDisplay.h"
+#include "Output/HeadingDisplay.h"
+#include "Output/RPMDisplay.h"
+#include "Output/SpeedDisplay.h"
+#include "Input/Flaps.h"
+#include "Input/Ruder.h"
+#include "Input/Throttle.h"
+#include "Input/SimpleSwitch.h"
+
 
 // function prototypes
 void ReadSerialData();
 void ProcessingInputLines(String &data);
+void PrintFloat(float a_number, int a_decimals);
 void loop();
 void setup();
 
-// Display helpers
+// Display helpers (FlightGear outputs)
 ADFDisplay m_adfDisplay = ADFDisplay();
 AltitudeDisplay m_altitudeDisplay = AltitudeDisplay();
 ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 0);
@@ -25,14 +31,14 @@ HeadingDisplay m_headingDisplay = HeadingDisplay();
 RPMDisplay m_rpmDisplay = RPMDisplay();
 SpeedDisplay m_speedDisplay = SpeedDisplay(5);
 
+// FlightGear inputs
+Flaps m_flaps = Flaps();
+Throttle m_throttle = Throttle();
+Ruder m_ruder = Ruder();
+SimpleSwitch m_parkingBreak = SimpleSwitch();
 
-// FlightGear variables
-float throttle = 0;
-bool parkingBrake = false;
 bool leftWheelBrake = false;
 bool rightWheelBrake = false;
-float flaps = 0;
-float ruder = 0;
 
 
 float totalSeconds = 10;
@@ -44,8 +50,6 @@ void setup() {
 	Serial.begin(19200);
 	Serial.println("Starting loop");
 	running = true;
-	m_speedDisplay.NextUpdateIsLongOfDuration();
-	m_ahDisplay.NextUpdateIsLongOfDuration();
 }
 
 void loop() {
@@ -136,4 +140,44 @@ void ProcessingInputLines(String &data)
 		data.remove(0, startPos);
 	else
 		data.remove(0);
+}
+
+void CheckForSendNewInput()
+{
+	if (m_flaps.HasChangedSinceLastCheck() ||
+		m_throttle.HasChangedSinceLastCheck() ||
+		m_ruder.HasChangedSinceLastCheck() ||
+		m_parkingBreak.HasChangedSinceLastCheck())
+		{
+			PrintFloat(m_throttle.m_value, 4);
+			Serial.print(",");
+			Serial.print(m_parkingBreak.m_value); // parking brake itself
+			Serial.print(",");
+			Serial.print(m_parkingBreak.m_value); // left brake double
+			Serial.print(",");
+			Serial.print(m_parkingBreak.m_value); // right brake double
+			Serial.print(",");
+			PrintFloat(m_flaps.m_value, 4);
+			Serial.print(",");
+			PrintFloat(m_ruder.m_position, 4);
+			Serial.print("\n");
+		}	
+}
+
+// Prints the float with the given precision
+void PrintFloat(float a_number, int a_decimals)
+{	
+	int integerPart = (int)a_number;
+	Serial.print(integerPart);
+	Serial.print(".");
+	float decimal_part = a_number - ((int)a_number);
+	decimal_part = decimal_part * 10;
+	while(a_decimals > 0)
+	{
+		integerPart = (int)decimal_part;
+		Serial.print(integerPart);
+		decimal_part -= integerPart;
+		decimal_part *= 10;
+		a_decimals--;
+	}
 }

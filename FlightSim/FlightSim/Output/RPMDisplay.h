@@ -26,8 +26,6 @@ public:
 	void UpdateMeter();
 protected:
 private:
-	RPMDisplay( const RPMDisplay &c );
-	RPMDisplay& operator=( const RPMDisplay &c );
 
 }; //RPMDisplay
 

@@ -22,12 +22,12 @@
 			<chunk>
 				<name>LeftWheelBrake</name>
 				<node>/controls/gear/brake-left</node>
-				<type>bool</type>
+				<type>float</type>
 			</chunk>
 			<chunk>
 				<name>RightWheelBrake</name>
 				<node>/controls/gear/brake-right</node>
-				<type>bool</type>
+				<type>float</type>
 			</chunk>
 			<chunk>
 				<name>Flaps</name>

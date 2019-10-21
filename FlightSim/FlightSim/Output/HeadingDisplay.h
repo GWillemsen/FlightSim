@@ -26,8 +26,6 @@ public:
 	void UpdateMeter();
 protected:
 private:
-	HeadingDisplay( const HeadingDisplay &c );
-	HeadingDisplay& operator=( const HeadingDisplay &c );
 
 }; //HeadingDisplay
 

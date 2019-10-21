@@ -26,8 +26,6 @@ public:
 	void UpdateMeter();
 protected:
 private:
-	ADFDisplay( const ADFDisplay &c );
-	ADFDisplay& operator=( const ADFDisplay &c );
 
 }; //ADFDisplay
 

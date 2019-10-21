@@ -26,8 +26,6 @@ public:
 	void UpdateMeter();
 protected:
 private:
-	ArtficialHorizionDisplay (const ArtficialHorizionDisplay &c );
-	ArtficialHorizionDisplay& operator=( const ArtficialHorizionDisplay &c );
 
 }; //ArtficialHorizion
 
