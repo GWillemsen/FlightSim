@@ -16,6 +16,8 @@
 
 
 // function prototypes
+void CheckForSendNewInput();
+void UpdateInputValues();
 void ReadSerialData();
 void ProcessingInputLines(String &data);
 void PrintFloat(float a_number, int a_decimals);
@@ -55,6 +57,8 @@ void setup() {
 void loop() {
 	if (!running)
 		return;
+	UpdateInputValues();
+	CheckForSendNewInput();
 	ReadSerialData();
 	count = count + 1;
 	if (endTimeRunning < millis())
@@ -142,6 +146,14 @@ void ProcessingInputLines(String &data)
 		data.remove(0);
 }
 
+void UpdateInputValues()
+{
+	m_flaps.Update();
+	m_throttle.Update();
+	m_ruder.Update();
+	m_parkingBreak.Update();
+}
+
 void CheckForSendNewInput()
 {
 	if (m_flaps.HasChangedSinceLastCheck() ||
@@ -153,11 +165,11 @@ void CheckForSendNewInput()
 			Serial.print(",");
 			Serial.print(m_parkingBreak.m_value); // parking brake itself
 			Serial.print(",");
-			Serial.print(m_parkingBreak.m_value); // left brake double
+			Serial.print(m_parkingBreak.m_value); // left brake double, in this case either full or non
 			Serial.print(",");
-			Serial.print(m_parkingBreak.m_value); // right brake double
+			Serial.print(m_parkingBreak.m_value); // right brake double, in this case either full or non
 			Serial.print(",");
-			PrintFloat(m_flaps.m_value, 4);
+			PrintFloat(m_flaps.m_position, 4);
 			Serial.print(",");
 			PrintFloat(m_ruder.m_position, 4);
 			Serial.print("\n");

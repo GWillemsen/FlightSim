@@ -17,3 +17,22 @@ SimpleSwitch::SimpleSwitch()
 SimpleSwitch::~SimpleSwitch()
 {
 } //~SimpleSwitch
+
+void SimpleSwitch::Update()
+{
+	
+}
+
+bool SimpleSwitch::HasChangedSinceLastCheck()
+{
+	static bool m_previousValue = 0;
+	if (this->m_value != m_previousValue)
+	{
+		m_previousValue = this->m_value;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

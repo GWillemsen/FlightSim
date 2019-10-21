@@ -14,7 +14,7 @@ class Flaps
 {
 //variables
 public:
-	float m_value;
+	float m_position;
 protected:
 private:
 
@@ -22,7 +22,6 @@ private:
 public:
 	Flaps();
 	~Flaps();
-	bool NextRetrieveIsLongOfDuration() { return false; }
 	void Update();
 	bool HasChangedSinceLastCheck();
 protected:

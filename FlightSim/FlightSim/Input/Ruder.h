@@ -22,7 +22,6 @@ private:
 public:
 	Ruder();
 	~Ruder();
-	bool NextRetrieveIsLongOfDuration() { return false; }
 	void Update();
 	bool HasChangedSinceLastCheck();
 protected:

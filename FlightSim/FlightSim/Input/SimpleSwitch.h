@@ -22,7 +22,6 @@ private:
 public:
 	SimpleSwitch();
 	~SimpleSwitch();
-	bool NextRetrieveIsLongOfDuration() { return false; }
 	void Update();
 	bool HasChangedSinceLastCheck();
 protected:

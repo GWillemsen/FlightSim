@@ -17,3 +17,22 @@ Throttle::Throttle()
 Throttle::~Throttle()
 {
 } //~Throttle
+
+void Throttle::Update()
+{
+	
+}
+
+bool Throttle::HasChangedSinceLastCheck()
+{
+	static float m_previousValue = 0;
+	if (this->m_value != m_previousValue)
+	{
+		m_previousValue = this->m_value;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

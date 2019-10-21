@@ -17,3 +17,22 @@ Ruder::Ruder()
 Ruder::~Ruder()
 {
 } //~Ruder
+
+void Ruder::Update()
+{
+	
+}
+
+bool Ruder::HasChangedSinceLastCheck()
+{
+	static float m_previousValue = 0;
+	if (this->m_position != m_previousValue)
+	{
+		m_previousValue = this->m_position;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

@@ -22,7 +22,6 @@ private:
 public:
 	Throttle();
 	~Throttle();
-	bool NextRetrieveIsLongOfDuration() { return false; }
 	void Update();
 	bool HasChangedSinceLastCheck();
 protected:
