@@ -7,11 +7,14 @@
 
 
 #include "SimpleSwitch.h"
+#include "Arduino.h"
 
-// default constructor
-SimpleSwitch::SimpleSwitch()
+SimpleSwitch::SimpleSwitch(int a_readPin, bool a_inverted, int a_pinMode)
 {
-} //SimpleSwitch
+	this->m_readPin = a_readPin;
+	pinMode(this->m_readPin, a_pinMode);
+	this->m_inverted = a_inverted;
+}
 
 // default destructor
 SimpleSwitch::~SimpleSwitch()
@@ -20,7 +23,15 @@ SimpleSwitch::~SimpleSwitch()
 
 void SimpleSwitch::Update()
 {
-	
+	int m_readValue = digitalRead(this->m_readPin);
+	if (this->m_inverted)
+	{
+		this->m_value = m_readValue == LOW;		
+	}
+	else
+	{
+		this->m_value = m_readValue == HIGH;
+	}
 }
 
 bool SimpleSwitch::HasChangedSinceLastCheck()

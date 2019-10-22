@@ -8,19 +8,23 @@
 
 #ifndef __THROTTLE_H__
 #define __THROTTLE_H__
-
+#include "Arduino.h"
 
 class Throttle
 {
 //variables
 public:
 	float m_value;
+	int m_readPin;
+	bool m_invertRead;
 protected:
 private:
 
 //functions
 public:
-	Throttle();
+	Throttle(int a_readPin) : Throttle(a_readPin, false, INPUT) {}
+	Throttle(int a_readPin, bool a_invertRead) : Throttle(a_readPin, a_invertRead, INPUT) {}
+	Throttle(int a_readPin, bool a_invertRead, int a_pinMode);
 	~Throttle();
 	void Update();
 	bool HasChangedSinceLastCheck();

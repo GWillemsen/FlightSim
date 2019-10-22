@@ -8,19 +8,23 @@
 
 #ifndef __SIMPLESWITCH_H__
 #define __SIMPLESWITCH_H__
-
+#include "Arduino.h"
 
 class SimpleSwitch
 {
 //variables
 public:
 	bool m_value;
+	int m_readPin;
+	bool m_inverted;
 protected:
 private:
 
 //functions
 public:
-	SimpleSwitch();
+	SimpleSwitch(int a_readPin) :SimpleSwitch(a_readPin, false, INPUT) {}
+	SimpleSwitch(int a_readPin, bool a_inverted) : SimpleSwitch(a_readPin, a_inverted, INPUT) {}
+	SimpleSwitch(int a_readPin, bool a_inverted, int a_pinMode);
 	~SimpleSwitch();
 	void Update();
 	bool HasChangedSinceLastCheck();

@@ -34,14 +34,10 @@ RPMDisplay m_rpmDisplay = RPMDisplay();
 SpeedDisplay m_speedDisplay = SpeedDisplay(5);
 
 // FlightGear inputs
-Flaps m_flaps = Flaps();
-Throttle m_throttle = Throttle();
-Ruder m_ruder = Ruder();
-SimpleSwitch m_parkingBreak = SimpleSwitch();
-
-bool leftWheelBrake = false;
-bool rightWheelBrake = false;
-
+Flaps m_flaps = Flaps(0);
+Throttle m_throttle = Throttle(0);
+Ruder m_ruder = Ruder(0);
+SimpleSwitch m_parkingBreak = SimpleSwitch(0);
 
 float totalSeconds = 10;
 unsigned long endTimeRunning = millis() + (totalSeconds * 1000);
@@ -75,15 +71,15 @@ void loop() {
 
 void ReadSerialData()
 {
-	static String serialData = "";
+	static String m_serialData = "";
 	
 	// only read if there is data available
 	if (Serial.available())
 	{
 		// set read time to 1 ms, so we only read available data
 		Serial.setTimeout(1);
-		serialData += Serial.readString();
-		ProcessingInputLines(serialData);		
+		m_serialData += Serial.readString();
+		ProcessingInputLines(m_serialData);		
 		// reset serial read timeout back to the default
 		Serial.setTimeout(1000);
 	}	
@@ -179,17 +175,19 @@ void CheckForSendNewInput()
 // Prints the float with the given precision
 void PrintFloat(float a_number, int a_decimals)
 {	
-	int integerPart = (int)a_number;
-	Serial.print(integerPart);
+	int m_integerPart = (int)a_number;
+	Serial.print(m_integerPart);
 	Serial.print(".");
-	float decimal_part = a_number - ((int)a_number);
-	decimal_part = decimal_part * 10;
+	float m_decimal_part = a_number - ((int)a_number);
+	m_decimal_part = m_decimal_part * 10;
+	String m_data = (String)m_integerPart;
 	while(a_decimals > 0)
 	{
-		integerPart = (int)decimal_part;
-		Serial.print(integerPart);
-		decimal_part -= integerPart;
-		decimal_part *= 10;
+		m_data = (String)m_integerPart;
+		m_integerPart = (int)m_decimal_part;
+		Serial.print(m_integerPart);
+		m_decimal_part -= m_integerPart;
+		m_decimal_part *= 10;
 		a_decimals--;
 	}
 }

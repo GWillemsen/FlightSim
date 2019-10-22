@@ -8,19 +8,23 @@
 
 #ifndef __RUDER_H__
 #define __RUDER_H__
-
+#include "Arduino.h"
 
 class Ruder
 {
 //variables
 public:
 	float m_position;
+	int m_readPin;
+	bool m_invertRead;
 protected:
 private:
 
 //functions
 public:
-	Ruder();
+	Ruder(int a_readPin) : Ruder (a_readPin, false, INPUT) {}
+	Ruder(int a_readPin, bool a_invertRead) : Ruder(a_readPin, a_invertRead, INPUT) {}
+	Ruder(int a_readPin, bool a_invertRead, int a_pinMode);
 	~Ruder();
 	void Update();
 	bool HasChangedSinceLastCheck();

@@ -8,19 +8,23 @@
 
 #ifndef __FLAPS_H__
 #define __FLAPS_H__
-
+#include "Arduino.h"
 
 class Flaps
 {
 //variables
 public:
 	float m_position;
+	int m_readPin;
+	bool m_invertRead;
 protected:
 private:
 
 //functions
 public:
-	Flaps();
+	Flaps(int a_readPin) : Flaps(a_readPin, false, INPUT) {}
+	Flaps(int a_readPin, bool a_invertRead) : Flaps(a_readPin, a_invertRead, INPUT) {}
+	Flaps(int a_readPin, bool a_invertRead, int a_pinMode);
 	~Flaps();
 	void Update();
 	bool HasChangedSinceLastCheck();
