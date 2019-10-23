@@ -16,12 +16,15 @@ class SpeedDisplay : public MeterBasis
 //variables
 public:
 	float m_knots;
+	int m_writePin;
+	int m_maxKnts;
+	int m_maxPwm;
 protected:
 private:
 
 //functions
 public:
-	SpeedDisplay(int a_pin);
+	SpeedDisplay(int a_writePin, int a_maxKnts, int a_maxPwm);
 	~SpeedDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	void UpdateMeter();

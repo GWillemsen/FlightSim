@@ -15,12 +15,15 @@ class RPMDisplay : public MeterBasis
 //variables
 public:
 	float m_rpms;
+	int m_writePin;
+	int m_maxRpm;
+	int m_maxPwmValue;
 protected:
 private:
 
 //functions
 public:
-	RPMDisplay();
+	RPMDisplay(int a_writePin, int a_maxRpm, int a_maxPwm);
 	~RPMDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	void UpdateMeter();

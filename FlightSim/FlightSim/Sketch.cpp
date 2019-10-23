@@ -14,7 +14,6 @@
 #include "Input/Throttle.h"
 #include "Input/SimpleSwitch.h"
 
-
 // function prototypes
 void CheckForSendNewInput();
 void UpdateInputValues();
@@ -28,10 +27,10 @@ void setup();
 ADFDisplay m_adfDisplay = ADFDisplay();
 AltitudeDisplay m_altitudeDisplay = AltitudeDisplay();
 ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 0);
-ClimbingDisplay m_climbingDisplay = ClimbingDisplay();
+ClimbingDisplay m_climbingDisplay = ClimbingDisplay(8, 9, 63, 62, -1.5, 1.5);
 HeadingDisplay m_headingDisplay = HeadingDisplay();
-RPMDisplay m_rpmDisplay = RPMDisplay();
-SpeedDisplay m_speedDisplay = SpeedDisplay(5);
+RPMDisplay m_rpmDisplay = RPMDisplay(10, 3000, 124);
+SpeedDisplay m_speedDisplay = SpeedDisplay(11, 340, 118);
 
 // FlightGear inputs
 Flaps m_flaps = Flaps(0);
@@ -113,7 +112,7 @@ void ProcessingInputLines(String &data)
 				else if (partIndex == 4)
 					toUpdateField = &m_altitudeDisplay.m_altitude;
 				else if (partIndex == 5)
-					toUpdateField = &m_climbingDisplay.m_speed;
+					toUpdateField = &m_climbingDisplay.m_knotsPerMinut;
 				else if (partIndex == 6)
 					toUpdateField = &m_adfDisplay.m_heading;
 				else if(partIndex == 7)
