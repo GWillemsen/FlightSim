@@ -19,7 +19,7 @@ AltitudeDisplay::~AltitudeDisplay()
 {
 } //~AltitudeDisplay
 
-void AltitudeDisplay::UpdateMeter()
+int AltitudeDisplay::UpdateMeter()
 {
-	
+	return 1;
 }

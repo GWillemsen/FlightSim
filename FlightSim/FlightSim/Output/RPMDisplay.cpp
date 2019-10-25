@@ -25,13 +25,14 @@ RPMDisplay::~RPMDisplay()
 	analogWrite(this->m_writePin, 0);
 } //~RPMDisplay
 
-void RPMDisplay::UpdateMeter()
+int RPMDisplay::UpdateMeter()
 {
 	int m_maxedOutValue = this->m_rpms;
 	if (m_maxedOutValue > this->m_maxRpm)
 	{	
 		m_maxedOutValue = this->m_maxRpm;
 	}
-	int m_mapedValue = map(this->m_rpms, 0, m_maxedOutValue, 0, this->m_maxPwmValue);
+	int m_mapedValue = map(m_maxedOutValue, 0, this->m_maxRpm, 0, this->m_maxPwmValue);
 	analogWrite(this->m_writePin, m_mapedValue);
+	return 1;
 }

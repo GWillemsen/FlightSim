@@ -7,7 +7,7 @@
 		All floats are normalized between -1 and 1 if not otherwise specified.
 	-->
 		<input>
-			<line_separator>newline</line_separator>
+			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<chunk>
 				<name>Throttle</name>
@@ -41,46 +41,56 @@
 			</chunk>
 		</input>
 		<output>
-			<line_separator>newline</line_separator>
+			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<binary_mode>false</binary_mode>
+			<!-- %d (interger format) is the default formatting, %5.3F means that it formats it as a floating point with 3 decimals and 5 integers -->
 			<chunk>
 				<name>Speed</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/airspeed-indicator/indicated-speed-kt</node>
 			</chunk>
 			<chunk>
 				<name>AHroll</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.2f</format>
 				<node>/instrumentation/attitude-indicator/indicated-roll-deg</node>
 			</chunk>
 			<chunk>
 				<name>AHpitch</name>
-				<format>%f</format>
-				<node>/instrumentation/attitude-indicator/indicated-roll-deg</node>
+				<type>float</type>
+				<format>%.2f</format>
+				<node>/instrumentation/attitude-indicator/indicated-pitch-deg</node>
 			</chunk>
 			<chunk>
 				<name>Heading</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/heading-indicator/indicated-heading-deg</node>
 			</chunk>
 			<chunk>
 				<name>Altitude</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/altimeter/indicated-altitude-ft</node>
 			</chunk>
 			<chunk>
 				<name>Climbing</name>
-				<format>%f</format>
-				<node>/instrumentation/vertical-speed-indicator/indicated-speed-mps</node>
+				<type>float</type>
+				<format>%.1f</format>
+				<node>/instrumentation/vertical-speed-indicator/indicated-speed-fpm</node>
 			</chunk>
 			<chunk>
 				<name>ADF</name>
-				<format>%f</format>
+				<format>%.2f</format>
+				<type>float</type>
 				<node>/instrumentation/adf/indicated-bearing-deg</node>
 			</chunk>
 			<chunk>
 				<name>EngineRPM</name>
+				<format>%.0f</format>
+				<type>float</type>
 				<node>/engines/engine/rpm</node>
 			</chunk>
 		</output>

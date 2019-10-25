@@ -19,7 +19,7 @@ ADFDisplay::~ADFDisplay()
 {
 } //~ADFDisplay
 
-void ADFDisplay::UpdateMeter()
+int ADFDisplay::UpdateMeter()
 {
-	
+	return 1;
 }

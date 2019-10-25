@@ -23,7 +23,7 @@ public:
 	ArtficialHorizionDisplay(int a_pinPitch, int a_pinRoll);
 	~ArtficialHorizionDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
-	void UpdateMeter();
+	int UpdateMeter();
 protected:
 private:
 

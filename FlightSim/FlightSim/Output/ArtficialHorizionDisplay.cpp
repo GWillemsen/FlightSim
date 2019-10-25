@@ -20,7 +20,7 @@ ArtficialHorizionDisplay::~ArtficialHorizionDisplay()
 {
 } //~ArtficialHorizion
 
-void ArtficialHorizionDisplay::UpdateMeter()
+int ArtficialHorizionDisplay::UpdateMeter()
 {
-	
+	return 1;
 }

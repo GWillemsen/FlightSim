@@ -19,7 +19,7 @@ HeadingDisplay::~HeadingDisplay()
 {
 } //~HeadingDisplay
 
-void HeadingDisplay::UpdateMeter()
+int HeadingDisplay::UpdateMeter()
 {
-	
+	return 1;
 }

@@ -14,7 +14,7 @@ class ClimbingDisplay : public MeterBasis
 {
 //variables
 public:
-	float m_knotsPerMinut;
+	float m_feetPerMinut;
 	int m_upperScalePin;
 	int m_lowerScalePin;
 	int m_maxLowerScalePwm;
@@ -29,7 +29,7 @@ public:
 	ClimbingDisplay(int a_upperScalePin, int a_lowerScalePin, int a_maxLowerScalePwm, int a_maxUpperScalePwm, int a_minClimbValue, int a_maxClimbValue);
 	~ClimbingDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
-	void UpdateMeter();
+	int UpdateMeter();
 
 protected:
 private:

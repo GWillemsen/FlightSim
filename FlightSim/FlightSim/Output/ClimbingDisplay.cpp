@@ -12,7 +12,7 @@
 // default constructor
 ClimbingDisplay::ClimbingDisplay(int a_upperScalePin, int a_lowerScalePin, int a_maxLowerScalePwm, int a_maxUpperScalePwm, int a_minClimbValue, int a_maxClimbValue)
 {
-	 this->m_knotsPerMinut = 0;
+	 this->m_feetPerMinut = 0;
 	 this->m_lowerScalePin = a_lowerScalePin;
 	 this->m_upperScalePin = a_upperScalePin;
 	 pinMode(a_lowerScalePin, OUTPUT);
@@ -31,11 +31,11 @@ ClimbingDisplay::~ClimbingDisplay()
 	analogWrite(this->m_lowerScalePin, 0);
 } //~ClimbingMeter
 
-void ClimbingDisplay::UpdateMeter()
+int ClimbingDisplay::UpdateMeter()
 {
 	int m_uperScaleValue = 0;
 	int m_lowerScaleValue = 0;
-	int m_convertedValue = this->m_knotsPerMinut;
+	int m_convertedValue = this->m_feetPerMinut;
 	if (m_convertedValue > this->m_maxClimbValue)
 	{
 		m_convertedValue = this->m_maxClimbValue;
@@ -45,20 +45,23 @@ void ClimbingDisplay::UpdateMeter()
 		m_convertedValue = this->m_minClimbValue;
 	}
 	
-	m_convertedValue = m_convertedValue / 1000;
+	int m_minClibm = this->m_minClimbValue;
+	int m_maxClimb = this->m_maxClimbValue;
+	int m_lowerPwm = -this->m_maxLowerScalePwm;
+	int m_upperPwm = this->m_maxUpperScalePwm;
+	int m_mappedValue = map(m_convertedValue, m_minClibm, m_maxClimb, m_lowerPwm, m_upperPwm);
 	
-	int m_mappedValue = map(m_convertedValue, 
-							this->m_minClimbValue, this->m_maxClimbValue,
-							-this->m_maxLowerScalePwm, this->m_maxUpperScalePwm);
 	if(m_mappedValue > 0)
 	{		
 		m_uperScaleValue = m_mappedValue;
 	}
 	else if (m_mappedValue < 0)
 	{	
-		m_lowerScaleValue = m_mappedValue;
+		m_lowerScaleValue = -m_mappedValue;
 	}
+	
 	
 	analogWrite(this->m_upperScalePin, m_uperScaleValue);
 	analogWrite(this->m_lowerScalePin, m_lowerScaleValue);
+	return 1;
 }

@@ -23,7 +23,7 @@ public:
 	AltitudeDisplay();
 	~AltitudeDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
-	void UpdateMeter();
+	int UpdateMeter();
 protected:
 private:
 

@@ -42,7 +42,7 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <avrtool>custom</avrtool>
     <avrtoolserialnumber />
     <avrdeviceexpectedsignature>0x1E950F</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_simulator>
@@ -142,6 +142,11 @@
             <Value>libm</Value>
           </ListValues>
         </avrgcccpp.linker.libraries.Libraries>
+        <avrgcccpp.linker.libraries.LibrarySearchPaths>
+          <ListValues>
+            <Value>D:\Program Files (x86)\Arduino\libraries\LiquidCrystal_I2C</Value>
+          </ListValues>
+        </avrgcccpp.linker.libraries.LibrarySearchPaths>
         <avrgcccpp.linker.miscellaneous.LinkerFlags>-Os</avrgcccpp.linker.miscellaneous.LinkerFlags>
         <avrgcccpp.assembler.general.IncludePaths>
           <ListValues>
@@ -220,6 +225,11 @@
             <Value>libm</Value>
           </ListValues>
         </avrgcccpp.linker.libraries.Libraries>
+        <avrgcccpp.linker.libraries.LibrarySearchPaths>
+          <ListValues>
+            <Value>D:\Program Files (x86)\Arduino\libraries\LiquidCrystal_I2C</Value>
+          </ListValues>
+        </avrgcccpp.linker.libraries.LibrarySearchPaths>
         <avrgcccpp.linker.miscellaneous.LinkerFlags>-Os</avrgcccpp.linker.miscellaneous.LinkerFlags>
         <avrgcccpp.assembler.general.IncludePaths>
           <ListValues>
@@ -253,6 +263,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Input\Throttle.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LiquidCrystal_I2C.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LiquidCrystal_I2C.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Output\ADFDisplay.cpp">
@@ -301,6 +317,18 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Sketch.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twi.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Wire.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Wire.h">
       <SubType>compile</SubType>
     </Compile>
     <Content Include="readme.html">

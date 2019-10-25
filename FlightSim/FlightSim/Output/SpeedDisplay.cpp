@@ -25,7 +25,7 @@ SpeedDisplay::~SpeedDisplay()
 	analogWrite(this->m_writePin, 0);
 } //~SpeedMeter
 
-void SpeedDisplay::UpdateMeter()
+int SpeedDisplay::UpdateMeter()
 {
 	int m_maxedOutValue = this->m_knots;
 	if (m_maxedOutValue > this->m_maxKnts)
@@ -34,4 +34,5 @@ void SpeedDisplay::UpdateMeter()
 	}
 	int m_mappedValue = map(m_maxedOutValue, 0, this->m_maxKnts, 0, this->m_maxPwm);
 	analogWrite(this->m_writePin, m_mappedValue);
+	return 1;
 }

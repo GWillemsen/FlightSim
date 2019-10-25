@@ -26,7 +26,7 @@ public:
 	RPMDisplay(int a_writePin, int a_maxRpm, int a_maxPwm);
 	~RPMDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
-	void UpdateMeter();
+	int UpdateMeter();
 protected:
 private:
 

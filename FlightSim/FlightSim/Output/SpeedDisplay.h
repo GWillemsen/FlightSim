@@ -27,7 +27,7 @@ public:
 	SpeedDisplay(int a_writePin, int a_maxKnts, int a_maxPwm);
 	~SpeedDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
-	void UpdateMeter();
+	int UpdateMeter();
 
 }; //SpeedMeter
 
