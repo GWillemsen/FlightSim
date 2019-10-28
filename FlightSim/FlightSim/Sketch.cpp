@@ -29,7 +29,7 @@ void setup();
 
 // Display helpers (FlightGear outputs)
 ADFDisplay m_adfDisplay = ADFDisplay();
-AltitudeDisplay m_altitudeDisplay = AltitudeDisplay();
+AltitudeDisplay m_altitudeDisplay = AltitudeDisplay(3,4, 50);
 ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 0);
 ClimbingDisplay m_climbingDisplay = ClimbingDisplay(5, 3, 63, 62, -1500, 1500);
 HeadingDisplay m_headingDisplay = HeadingDisplay();
@@ -90,10 +90,12 @@ void setup() {
 	Serial.begin(19200);
 	Serial.println("Starting loop");
 	running = true;
+	#if USE_DISPLAY
 	display.init();
 	display.clear();
 	display.setBacklight(1);
 	display.print("hello world");
+	#endif
 }
 
 void loop() {

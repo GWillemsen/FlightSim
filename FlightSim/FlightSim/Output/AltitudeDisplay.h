@@ -15,12 +15,15 @@ class AltitudeDisplay : public MeterBasis
 //variables
 public:
 	float m_altitude;
+	int m_stepPin;
+	int m_dirPin;
+	int m_valueOfOneStep;
 protected:
 private:
 
 //functions
 public:
-	AltitudeDisplay();
+	AltitudeDisplay(int a_stepPin, int a_dirPin, int a_valueOfOneStep);
 	~AltitudeDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
