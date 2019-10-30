@@ -30,7 +30,7 @@ void setup();
 // Display helpers (FlightGear outputs)
 ADFDisplay m_adfDisplay = ADFDisplay();
 AltitudeDisplay m_altitudeDisplay = AltitudeDisplay(3,4, 50);
-ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 0);
+ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 1, 13, 12, 7, 8);
 ClimbingDisplay m_climbingDisplay = ClimbingDisplay(5, 3, 63, 62, -1500, 1500);
 HeadingDisplay m_headingDisplay = HeadingDisplay();
 RPMDisplay m_rpmDisplay = RPMDisplay(9, 3000, 124);
