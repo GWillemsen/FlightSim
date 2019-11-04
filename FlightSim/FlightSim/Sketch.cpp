@@ -1,6 +1,6 @@
-﻿/*Begining of Auto generated code by Atmel studio */
+﻿#ifdef __AS7__
 #include <Arduino.h>
-/*End of auto generated code by Atmel studio */
+#endif
 
 #include "Output/ADFDisplay.h"
 #include "Output/AltitudeDisplay.h"
@@ -13,11 +13,15 @@
 #include "Input/Ruder.h"
 #include "Input/Throttle.h"
 #include "Input/SimpleSwitch.h"
-#include "LiquidCrystal_I2C.h"
-//#define USE_DISPLAY
+// #define USE_DISPLAY 1
 
+#ifdef USE_DISPLAY
+#include "LiquidCrystal_I2C.h"
+#endif
 
 // function prototypes
+#ifdef __AS7__
+void SetupMeterArrays();
 void UpdateMeterValues();
 void CheckForSendNewInput();
 void UpdateInputValues();
@@ -26,28 +30,54 @@ void ProcessingInputLines(String &data);
 void PrintFloat(float a_number, int a_decimals);
 void loop();
 void setup();
+#endif
 
+#ifdef __AS7__
 // Display helpers (FlightGear outputs)
-ADFDisplay m_adfDisplay = ADFDisplay();
-AltitudeDisplay m_altitudeDisplay = AltitudeDisplay(3,4, 50);
-ArtficialHorizionDisplay m_ahDisplay = ArtficialHorizionDisplay(0, 1, 13, 12, 7, 8);
-ClimbingDisplay m_climbingDisplay = ClimbingDisplay(5, 3, 63, 62, -1500, 1500);
-HeadingDisplay m_headingDisplay = HeadingDisplay();
-RPMDisplay m_rpmDisplay = RPMDisplay(9, 3000, 124);
-SpeedDisplay m_speedDisplay = SpeedDisplay(10, 240, 108); // 220knots = 118
+ADFDisplay* m_adfDisplay = new ADFDisplay();
+AltitudeDisplay* m_altitudeDisplay = new AltitudeDisplay(7, 4, 7, 4, 20, 81); // fix the MS1, and MS2 pins
+ArtficialHorizionDisplay* m_ahDisplay = new ArtficialHorizionDisplay(0, 1, 12, 13, 7, 8); //13, 12, 7, 8);
+ClimbingDisplay* m_climbingDisplay = new ClimbingDisplay(5, 3, 63, 62, -1500, 1500);
+HeadingDisplay* m_headingDisplay = new HeadingDisplay();
+RPMDisplay* m_rpmDisplay = new RPMDisplay(9, 3000, 124);
+SpeedDisplay* m_speedDisplay = new SpeedDisplay(10, 240, 108); // 220knots = 118
 MeterBasis* m_meterDisplays[7];
 
 // FlightGear inputs
-Flaps m_flaps = Flaps(0);
-Throttle m_throttle = Throttle(0);
-Ruder m_ruder = Ruder(0);
-SimpleSwitch m_parkingBreak = SimpleSwitch(0);
-
-float totalSeconds = 10;
-unsigned long endTimeRunning = millis() + (totalSeconds * 1000);
-bool running = false;
-unsigned long count = 0;
+Flaps* m_flaps = new Flaps(0);
+Throttle* m_throttle = new Throttle(0);
+Ruder* m_ruder = new Ruder(0);
+SimpleSwitch* m_parkingBreak = new SimpleSwitch(0);
+#ifdef USE_DISPLAY
 LiquidCrystal_I2C display = LiquidCrystal_I2C(0x3F, 20, 4); // 0x27 or 0x3F
+#endif
+MeterBasis* m_meters[7];
+
+void setup() {
+	Serial.begin(19200);
+	Serial.println("Starting INIT");
+	#if USE_DISPLAY
+	display.init();
+	display.clear();
+	display.setBacklight(1);
+	display.print(".");
+	#endif
+	SetupMeterArrays();
+	Serial.println("Starting loop");
+}
+
+void SetupMeterArrays()
+{
+	Serial.print("Setting up meter array...");
+	m_meters[0] = m_adfDisplay;
+	m_meters[1] = m_altitudeDisplay;
+	m_meters[2] = m_ahDisplay;
+	m_meters[3] = m_climbingDisplay;
+	m_meters[4] = m_headingDisplay;
+	m_meters[5] = m_rpmDisplay;
+	m_meters[6] = m_speedDisplay;
+	Serial.println("Done");
+}
 
 void UpdateMeterValues()
 {
@@ -61,15 +91,9 @@ void UpdateMeterValues()
 	m_isUpdated[5] = false;
 	m_isUpdated[6] = false;
 	int m_finishedCount = 0;
-	MeterBasis* m_meters[7];
-	m_meters[0] = &m_adfDisplay;
-	m_meters[1] = &m_altitudeDisplay;
-	m_meters[2] = &m_ahDisplay;
-	m_meters[3] = &m_climbingDisplay;
-	m_meters[4] = &m_headingDisplay;
-	m_meters[5] = &m_rpmDisplay;
-	m_meters[6] = &m_speedDisplay;
-	while(m_finishedCount != 7)
+	unsigned long m_startTime = millis();
+	
+	while (m_finishedCount != 7 && millis() - m_startTime < 10)
 	{
 		for(int m_meterIndex = 0; m_meterIndex < 7; m_meterIndex++)
 		{
@@ -86,22 +110,11 @@ void UpdateMeterValues()
 	}	
 }
 
-void setup() {
-	Serial.begin(19200);
-	Serial.println("Starting loop");
-	running = true;
-	#if USE_DISPLAY
-	display.init();
-	display.clear();
-	display.setBacklight(1);
-	display.print("hello world");
-	#endif
-}
 
 void loop() {
-	
-	/*UpdateInputValues();
-	CheckForSendNewInput();*/
+
+	UpdateInputValues();
+	CheckForSendNewInput();
 	ReadSerialData();
 	UpdateMeterValues();
 }
@@ -142,22 +155,6 @@ void ProcessingInputLines(String &data)
 		#ifdef USE_DISPLAY
 		display.clear();
 		#endif
-		/*display.print("  ");
-		display.setCursor(9, 0);
-		display.print("  ");
-		display.setCursor(18, 0);
-		display.print("  ");
-		display.setCursor(9, 1);
-		display.print("  ");
-		display.setCursor(18, 1);
-		display.print("  ");
-		display.setCursor(9, 2);
-		display.print("  ");
-		display.setCursor(18, 2);
-		display.print("  ");
-		display.setCursor(9, 3);
-		display.print("  ");
-		display.setCursor(18, 3);*/
 		int partIndex = 0;
 		if (lineEnd == m_startPos)
 		{
@@ -170,21 +167,21 @@ void ProcessingInputLines(String &data)
 				// select the next property to update
 				float* toUpdateField;
 				if (partIndex == 0)
-					toUpdateField = &m_speedDisplay.m_knots;
+					toUpdateField = &m_speedDisplay->m_knots;
 				else if (partIndex == 1)
-					toUpdateField = &m_ahDisplay.m_rotation;
+					toUpdateField = &m_ahDisplay->m_rotation;
 				else if (partIndex == 2)
-					toUpdateField = &m_ahDisplay.m_pitch;
+					toUpdateField = &m_ahDisplay->m_pitch;
 				else if (partIndex == 3)
-					toUpdateField = &m_headingDisplay.m_heading;
+					toUpdateField = &m_headingDisplay->m_heading;
 				else if (partIndex == 4)
-					toUpdateField = &m_altitudeDisplay.m_altitude;
+					toUpdateField = &m_altitudeDisplay->m_altitude;
 				else if (partIndex == 5)
-					toUpdateField = &m_climbingDisplay.m_feetPerMinut;
+					toUpdateField = &m_climbingDisplay->m_feetPerMinut;
 				else if (partIndex == 6)
-					toUpdateField = &m_adfDisplay.m_heading;
+					toUpdateField = &m_adfDisplay->m_heading;
 				else if(partIndex == 7)
-					toUpdateField = &m_rpmDisplay.m_rpms;					
+					toUpdateField = &m_rpmDisplay->m_rpms;					
 				
 				int nextSeparator = data.indexOf(",", m_startPos);
 				// if the input is terminated or a next line is also available
@@ -281,30 +278,30 @@ void ProcessingInputLines(String &data)
 
 void UpdateInputValues()
 {
-	m_flaps.Update();
-	m_throttle.Update();
-	m_ruder.Update();
-	m_parkingBreak.Update();
+	m_flaps->Update();
+	m_throttle->Update();
+	m_ruder->Update();
+	m_parkingBreak->Update();
 }
 
 void CheckForSendNewInput()
 {
-	if (m_flaps.HasChangedSinceLastCheck() ||
-		m_throttle.HasChangedSinceLastCheck() ||
-		m_ruder.HasChangedSinceLastCheck() ||
-		m_parkingBreak.HasChangedSinceLastCheck())
+	if (m_flaps->HasChangedSinceLastCheck() ||
+		m_throttle->HasChangedSinceLastCheck() ||
+		m_ruder->HasChangedSinceLastCheck() ||
+		m_parkingBreak->HasChangedSinceLastCheck())
 		{
-			PrintFloat(m_throttle.m_value, 4);
+			PrintFloat(m_throttle->m_value, 4);
 			Serial.print(",");
-			Serial.print(m_parkingBreak.m_value); // parking brake itself
+			Serial.print(m_parkingBreak->m_value); // parking brake itself
 			Serial.print(",");
-			Serial.print(m_parkingBreak.m_value); // left brake double, in this case either full or non
+			Serial.print(m_parkingBreak->m_value); // left brake double, in this case either full or non
 			Serial.print(",");
-			Serial.print(m_parkingBreak.m_value); // right brake double, in this case either full or non
+			Serial.print(m_parkingBreak->m_value); // right brake double, in this case either full or non
 			Serial.print(",");
-			PrintFloat(m_flaps.m_position, 4);
+			PrintFloat(m_flaps->m_position, 4);
 			Serial.print(",");
-			PrintFloat(m_ruder.m_position, 4);
+			PrintFloat(m_ruder->m_position, 4);
 			Serial.print("\n");
 		}	
 }
@@ -329,3 +326,4 @@ void PrintFloat(float a_number, int a_decimals)
 	}
 }
 
+#endif

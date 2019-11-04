@@ -17,13 +17,16 @@ public:
 	float m_altitude;
 	int m_stepPin;
 	int m_dirPin;
-	int m_valueOfOneStep;
+	int m_ms1Pin;
+	int m_ms2Pin;
+	int m_minHeightDiffBeforeMoving;
+	int m_stepsPer1000Feet;
 protected:
 private:
 
 //functions
 public:
-	AltitudeDisplay(int a_stepPin, int a_dirPin, int a_valueOfOneStep);
+	AltitudeDisplay(int a_stepPin, int a_dirPin, int a_ms1Pin, int a_ms2Pin, int a_minHeightDiffBeforeMoving, int a_stepsPer1000Feet);
 	~AltitudeDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();

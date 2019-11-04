@@ -42,7 +42,7 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <avrtool>custom</avrtool>
     <avrtoolserialnumber />
     <avrdeviceexpectedsignature>0x1E950F</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_simulator>
@@ -70,7 +70,7 @@
       </ToolNumber>
       <ToolName xmlns="">Custom Programming Tool</ToolName>
     </custom>
-    <CustomProgrammingToolCommand>"D:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe" -C"D:\Program Files (x86)\Arduino\hardware\tools\avr/etc/avrdude.conf" -v -patmega328p -carduino -PCOM8 -b115200 -D -Uflash:w:"D:\Source\Atmel Studio\FlightSim\FlightSim\FlightSim\Debug\FlightSim".hex:i </CustomProgrammingToolCommand>
+    <CustomProgrammingToolCommand>"C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude.exe" -C"C:\Program Files (x86)\Arduino\hardware\tools\avr/etc/avrdude.conf" -v -patmega328p -carduino -PCOM8 -b115200 -D -Uflash:w:"D:\Source\Atmel Studio\FlightSim\FlightSim\FlightSim\Debug\FlightSim".hex:i </CustomProgrammingToolCommand>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -178,6 +178,7 @@
             <Value>USB_VID=0x2341</Value>
             <Value>USB_PID=0x0043</Value>
             <Value>USB_MANUFACTURER="\"Arduino LLC\""</Value>
+            <Value>__AS7__</Value>
           </ListValues>
         </avrgcc.compiler.symbols.DefSymbols>
         <avrgcc.compiler.directories.IncludePaths>
@@ -205,6 +206,7 @@
             <Value>USB_VID=0x2341</Value>
             <Value>USB_PID=0x0043</Value>
             <Value>USB_MANUFACTURER="\"Arduino LLC\""</Value>
+            <Value>__AS7__</Value>
           </ListValues>
         </avrgcccpp.compiler.symbols.DefSymbols>
         <avrgcccpp.compiler.directories.IncludePaths>
