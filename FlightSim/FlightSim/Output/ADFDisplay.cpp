@@ -9,9 +9,9 @@
 #include "ADFDisplay.h"
 
 // default constructor
-ADFDisplay::ADFDisplay()
+ADFDisplay::ADFDisplay(int a_startHeading)
 {
-	m_heading = 0;
+	this->m_heading = a_startHeading;
 } //ADFDisplay
 
 // default destructor

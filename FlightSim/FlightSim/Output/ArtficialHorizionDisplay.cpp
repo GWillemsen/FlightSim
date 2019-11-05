@@ -43,9 +43,7 @@ int ArtficialHorizionDisplay::UpdateMeter()
 		this->m_rotation = -0.15;
 		
 		
-	Serial.println("Pitch");
 	bool m_pitch = UpdatePart(this->m_pitch * 360, this->m_pinPitchPot, this->m_pinPitchA, this->m_pinPitchB, -20, 20, 0);
-	Serial.println("Roll");
 	bool m_roll = UpdatePart(this->m_rotation * 360, this->m_pinRollPot, this->m_pinRollA, this->m_pinRollB, -54, 54, 0);
 	return (m_roll) ? 1 : 0;
 }
@@ -56,7 +54,6 @@ bool ArtficialHorizionDisplay::UpdatePart(int a_degrees, int a_potPin, int a_pin
 	int m_shouldValueOnPot = map(a_degrees, a_minInput, a_maxInput, 1000, 0);
 	int m_potValue = analogRead(a_potPin);
 	int m_returnValue = 0;
-	Serial.print("To: " + (String)m_shouldValueOnPot + ", from: " + (String)m_potValue + " calc degrees: " + (String)a_degrees);
 	bool m_inBelowRange = m_potValue + 7 >= m_shouldValueOnPot && m_potValue < m_shouldValueOnPot;
 	bool m_inAboveRange = m_potValue - 7 <= m_shouldValueOnPot && m_potValue > m_shouldValueOnPot;
 	if (m_potValue == m_shouldValueOnPot || m_inAboveRange || m_inBelowRange)
@@ -82,7 +79,6 @@ bool ArtficialHorizionDisplay::UpdatePart(int a_degrees, int a_potPin, int a_pin
 		}
 		digitalWrite(a_pinA, m_pinAValue);
 		digitalWrite(a_pinB, m_pinBValue);
-		Serial.println(" a: " + (String)m_pinAValue + ", " + (String)a_pinA + " b: " + (String)m_pinBValue + ", " + (String)a_pinB);
 		m_returnValue = 0;
 	}
 	return m_returnValue;

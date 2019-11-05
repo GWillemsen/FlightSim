@@ -27,7 +27,7 @@ private:
 //functions
 public:
 	ClimbingDisplay(int a_upperScalePin, int a_lowerScalePin, int a_maxLowerScalePwm, int a_maxUpperScalePwm, int a_minClimbValue, int a_maxClimbValue);
-	~ClimbingDisplay();
+	virtual ~ClimbingDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 

@@ -12,8 +12,9 @@
 class MeterBasis
 {
 public:
-	virtual bool NextUpdateIsLongOfDuration() { return false; }
-	virtual int UpdateMeter() {};	
+	virtual ~MeterBasis(){}
+	virtual bool NextUpdateIsLongOfDuration() =0;
+	virtual int UpdateMeter() = 0;	
 };
 
 

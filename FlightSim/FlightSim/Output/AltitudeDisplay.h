@@ -27,7 +27,7 @@ private:
 //functions
 public:
 	AltitudeDisplay(int a_stepPin, int a_dirPin, int a_ms1Pin, int a_ms2Pin, int a_minHeightDiffBeforeMoving, int a_stepsPer1000Feet);
-	~AltitudeDisplay();
+	virtual ~AltitudeDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 protected:

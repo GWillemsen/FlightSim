@@ -27,7 +27,7 @@ private:
 //functions
 public:
 	ArtficialHorizionDisplay(int a_pinPitchPot, int a_pinRollPot, int a_pinPitchA, int a_pinPitchB, int a_pinRollA, int a_pinRollB);
-	~ArtficialHorizionDisplay();
+	virtual ~ArtficialHorizionDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 protected:

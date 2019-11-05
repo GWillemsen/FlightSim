@@ -13,7 +13,7 @@
 #include "Input/Ruder.h"
 #include "Input/Throttle.h"
 #include "Input/SimpleSwitch.h"
-// #define USE_DISPLAY 1
+//#define USE_DISPLAY 1
 
 #ifdef USE_DISPLAY
 #include "LiquidCrystal_I2C.h"
@@ -21,6 +21,7 @@
 
 // function prototypes
 #ifdef __AS7__
+void GetPartData(int m_partIndex, int& m_line, String &m_val, int &m_offset);
 void SetupMeterArrays();
 void UpdateMeterValues();
 void CheckForSendNewInput();
@@ -32,24 +33,22 @@ void loop();
 void setup();
 #endif
 
-#ifdef __AS7__
 // Display helpers (FlightGear outputs)
-ADFDisplay* m_adfDisplay = new ADFDisplay();
-AltitudeDisplay* m_altitudeDisplay = new AltitudeDisplay(7, 4, 7, 4, 20, 81); // fix the MS1, and MS2 pins
-ArtficialHorizionDisplay* m_ahDisplay = new ArtficialHorizionDisplay(0, 1, 12, 13, 7, 8); //13, 12, 7, 8);
-ClimbingDisplay* m_climbingDisplay = new ClimbingDisplay(5, 3, 63, 62, -1500, 1500);
-HeadingDisplay* m_headingDisplay = new HeadingDisplay();
-RPMDisplay* m_rpmDisplay = new RPMDisplay(9, 3000, 124);
-SpeedDisplay* m_speedDisplay = new SpeedDisplay(10, 240, 108); // 220knots = 118
-MeterBasis* m_meterDisplays[7];
+ADFDisplay m_adfDisplay(0);
+AltitudeDisplay m_altitudeDisplay(1, 1, 1, 1, 20, 81); // fix the MS1, and MS2 pins
+ArtficialHorizionDisplay m_ahDisplay(1, 1, 1, 1, 7, 8); //13, 12, 7, 8);
+ClimbingDisplay m_climbingDisplay(3, 4, 63, 62, -1500, 1500);
+HeadingDisplay m_headingDisplay(0);
+RPMDisplay m_rpmDisplay(5, 3000, 124);
+SpeedDisplay m_speedDisplay(2, 240, 108); // 220knots = 118
 
 // FlightGear inputs
-Flaps* m_flaps = new Flaps(0);
-Throttle* m_throttle = new Throttle(0);
-Ruder* m_ruder = new Ruder(0);
-SimpleSwitch* m_parkingBreak = new SimpleSwitch(0);
+Flaps m_flaps(0);
+Throttle m_throttle(0);
+Ruder m_ruder(0);
+SimpleSwitch m_parkingBreak(25, false, INPUT_PULLUP);
 #ifdef USE_DISPLAY
-LiquidCrystal_I2C display = LiquidCrystal_I2C(0x3F, 20, 4); // 0x27 or 0x3F
+LiquidCrystal_I2C display(0x3F, 20, 4); // 0x27 or 0x3F
 #endif
 MeterBasis* m_meters[7];
 
@@ -69,13 +68,13 @@ void setup() {
 void SetupMeterArrays()
 {
 	Serial.print("Setting up meter array...");
-	m_meters[0] = m_adfDisplay;
-	m_meters[1] = m_altitudeDisplay;
-	m_meters[2] = m_ahDisplay;
-	m_meters[3] = m_climbingDisplay;
-	m_meters[4] = m_headingDisplay;
-	m_meters[5] = m_rpmDisplay;
-	m_meters[6] = m_speedDisplay;
+	m_meters[0] = &m_adfDisplay;
+	m_meters[1] = &m_altitudeDisplay;
+	m_meters[2] = &m_ahDisplay;
+	m_meters[3] = &m_climbingDisplay;
+	m_meters[4] = &m_headingDisplay;
+	m_meters[5] = &m_rpmDisplay;
+	m_meters[6] = &m_speedDisplay;
 	Serial.println("Done");
 }
 
@@ -138,9 +137,8 @@ void ReadSerialData()
 		}		
 		char newline = '#';
 		int data = m_serialData.indexOf(newline);
-		//Serial.print((String)data + " " + (String)m_serialData.length() + "\n");
-		
 		ProcessingInputLines(m_serialData);
+		
 		// reset serial read timeout back to the default
 		Serial.setTimeout(1000);
 	}	
@@ -167,21 +165,21 @@ void ProcessingInputLines(String &data)
 				// select the next property to update
 				float* toUpdateField;
 				if (partIndex == 0)
-					toUpdateField = &m_speedDisplay->m_knots;
+					toUpdateField = &m_speedDisplay.m_knots;
 				else if (partIndex == 1)
-					toUpdateField = &m_ahDisplay->m_rotation;
+					toUpdateField = &m_ahDisplay.m_rotation;
 				else if (partIndex == 2)
-					toUpdateField = &m_ahDisplay->m_pitch;
+					toUpdateField = &m_ahDisplay.m_pitch;
 				else if (partIndex == 3)
-					toUpdateField = &m_headingDisplay->m_heading;
+					toUpdateField = &m_headingDisplay.m_heading;
 				else if (partIndex == 4)
-					toUpdateField = &m_altitudeDisplay->m_altitude;
+					toUpdateField = &m_altitudeDisplay.m_altitude;
 				else if (partIndex == 5)
-					toUpdateField = &m_climbingDisplay->m_feetPerMinut;
+					toUpdateField = &m_climbingDisplay.m_feetPerMinut;
 				else if (partIndex == 6)
-					toUpdateField = &m_adfDisplay->m_heading;
+					toUpdateField = &m_adfDisplay.m_heading;
 				else if(partIndex == 7)
-					toUpdateField = &m_rpmDisplay->m_rpms;					
+					toUpdateField = &m_rpmDisplay.m_rpms;					
 				
 				int nextSeparator = data.indexOf(",", m_startPos);
 				// if the input is terminated or a next line is also available
@@ -196,52 +194,7 @@ void ProcessingInputLines(String &data)
 				String m_val = String(m_float, 1);
 				int m_line = 0;
 				int m_offset = 0;
-				if(partIndex == 0)
-				{
-					m_line = 1;
-					m_val = "Sp: " + m_val;
-				}
-				else if(partIndex == 1)
-				{
-					m_line = 1;
-					m_offset = 10;
-					m_val = "Ro: " + m_val;
-				}
-				else if(partIndex == 2)
-				{
-					m_line = 2;
-					m_offset = 0;
-					m_val = "Pt: " + m_val;
-				}
-				else if(partIndex == 3)
-				{
-					m_line = 2;
-					m_offset = 10;
-					m_val = "He: " + m_val;
-				}
-				else if(partIndex == 4)
-				{
-					m_line = 3;
-					m_offset = 0;
-					m_val = "At: " + m_val;
-				}
-				else if(partIndex == 5)
-				{
-					m_line = 3;
-					m_offset = 10;
-					m_val = "Fp: " + m_val;					
-				}
-				else if(partIndex == 5)
-				{
-					m_line = 3;
-					m_offset = 10;
-					m_val = "AD: " + m_val;
-				}
-				else if(partIndex == 7)
-				{
-					m_line = 4;
-					m_val = "Rp: " + m_val;					
-				}
+				GetPartData(partIndex, m_line, m_val, m_offset);
 				
 				if (m_line)
 				{
@@ -276,6 +229,55 @@ void ProcessingInputLines(String &data)
 		data.remove(0);
 }
 
+void GetPartData(int m_partIndex, int& m_line, String &m_val, int &m_offset)
+{
+	if(m_partIndex == 0)
+	{
+		m_line = 1;
+		m_val = "Sp: " + m_val;
+	}
+	else if(m_partIndex == 1)
+	{
+		m_line = 1;
+		m_offset = 10;
+		m_val = "Ro: " + m_val;
+	}
+	else if(m_partIndex == 2)
+	{
+		m_line = 2;
+		m_offset = 0;
+		m_val = "Pt: " + m_val;
+	}
+	else if(m_partIndex == 3)
+	{
+		m_line = 2;
+		m_offset = 10;
+		m_val = "He: " + m_val;
+	}
+	else if(m_partIndex == 4)
+	{
+		m_line = 3;
+		m_offset = 0;
+		m_val = "At: " + m_val;
+	}
+	else if(m_partIndex == 5)
+	{
+		m_line = 3;
+		m_offset = 10;
+		m_val = "Fp: " + m_val;
+	}
+	else if(m_partIndex == 5)
+	{
+		m_line = 3;
+		m_offset = 10;
+		m_val = "AD: " + m_val;
+	}
+	else if(m_partIndex == 7)
+	{
+		m_line = 4;
+		m_val = "Rp: " + m_val;
+	}	
+}
 void UpdateInputValues()
 {
 	m_flaps->Update();
@@ -325,5 +327,3 @@ void PrintFloat(float a_number, int a_decimals)
 		a_decimals--;
 	}
 }
-
-#endif

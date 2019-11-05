@@ -20,8 +20,8 @@ private:
 
 //functions
 public:
-	ADFDisplay();
-	~ADFDisplay();
+	ADFDisplay(int a_startHeading);
+	virtual ~ADFDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 protected:

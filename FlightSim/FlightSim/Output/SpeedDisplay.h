@@ -25,7 +25,7 @@ private:
 //functions
 public:
 	SpeedDisplay(int a_writePin, int a_maxKnts, int a_maxPwm);
-	~SpeedDisplay();
+	virtual ~SpeedDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 

@@ -24,7 +24,7 @@ private:
 //functions
 public:
 	RPMDisplay(int a_writePin, int a_maxRpm, int a_maxPwm);
-	~RPMDisplay();
+	virtual ~RPMDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 protected:

@@ -20,8 +20,8 @@ private:
 
 //functions
 public:
-	HeadingDisplay();
-	~HeadingDisplay();
+	HeadingDisplay(int a_startHeading);
+	virtual ~HeadingDisplay();
 	bool NextUpdateIsLongOfDuration() { return false; }
 	int UpdateMeter();
 protected:

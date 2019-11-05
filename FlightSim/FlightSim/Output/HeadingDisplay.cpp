@@ -9,9 +9,9 @@
 #include "HeadingDisplay.h"
 
 // default constructor
-HeadingDisplay::HeadingDisplay()
+HeadingDisplay::HeadingDisplay(int a_startHeading)
 {
-	m_heading = 0;
+	this->m_heading = a_startHeading;
 } //HeadingDisplay
 
 // default destructor
