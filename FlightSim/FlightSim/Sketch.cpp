@@ -14,7 +14,7 @@
 #include <Arduino.h>
 #endif
 
-//#define USE_DISPLAY 1
+#define USE_DISPLAY 1
 
 #ifdef USE_DISPLAY
 #include "LiquidCrystal_I2C.h"
@@ -36,7 +36,7 @@ void setup();
 
 // Display helpers (FlightGear outputs)
 ADFDisplay m_adfDisplay(0);
-AltitudeDisplay m_altitudeDisplay(31, 32, 29, 30, 20, 81); // fix the MS1, and MS2 pins
+AltitudeDisplay m_altitudeDisplay(31, 32, 29, 30, 20, 20); // fix the MS1, and MS2 pins
 ArtficialHorizionDisplay m_ahDisplay(10, 11, 34, 35, 36, 37); //13, 12, 7, 8);
 ClimbingDisplay m_climbingDisplay(3, 4, 102, 97, -1500, 1500);
 HeadingDisplay m_headingDisplay(0);
@@ -68,6 +68,12 @@ void setup() {
 	#endif
 	SetupMeterArrays();
 	Serial.println("Starting loop");
+	m_altitudeDisplay.m_altitude = 1000;
+	while(m_altitudeDisplay.UpdateMeter() == 0)
+	{
+		delay(1);
+		Serial.println("Updateing altitude");
+	}
 }
 
 void loop() {
@@ -96,7 +102,7 @@ void UpdateMeterValues()
 	bool m_hasToUpdate = true;
 	bool m_isUpdated[7];
 	m_isUpdated[0] = false;
-	m_isUpdated[1] = false;
+	m_isUpdated[1] = true;
 	m_isUpdated[2] = false;
 	m_isUpdated[3] = false;
 	m_isUpdated[4] = false;
@@ -119,7 +125,7 @@ void UpdateMeterValues()
 				}
 			}
 		}
-	}	
+	}
 }
 
 void ReadSerialData()
@@ -138,14 +144,14 @@ void ReadSerialData()
 			if (m_data < 0)
 				break;
 			m_serialData += (char)m_data;
-		}		
+		}
 		char newline = '#';
 		int data = m_serialData.indexOf(newline);
 		ProcessingInputLines(m_serialData);
 		
 		// reset serial read timeout back to the default
 		Serial.setTimeout(1000);
-	}	
+	}
 }
 
 void ProcessingInputLines(String &data)
@@ -184,7 +190,7 @@ void ProcessingInputLines(String &data)
 					toUpdateField = &m_adfDisplay.m_heading;
 				else if(partIndex == 7)
 					toUpdateField = &m_rpmDisplay.m_rpms;
-				else if(partIndex == 8)					
+				else if(partIndex == 8)
 					toUpdateField = &m_tunSlipDisplay.m_slip;
 				else if(partIndex == 9)
 					toUpdateField = &m_tunSlipDisplay.m_turn;
@@ -208,7 +214,7 @@ void ProcessingInputLines(String &data)
 				{
 					for(int i = 0; i < m_val.length(); i++)
 					{
-						display.setCursor(i + m_offset, m_line - 1);						
+						display.setCursor(i + m_offset, m_line - 1);
 						display.print(m_val[i]);
 					}
 					if (m_val.length() < 10)
@@ -217,7 +223,7 @@ void ProcessingInputLines(String &data)
 						{
 							display.setCursor(i + m_offset, m_line - 1);
 							display.print(" ");
-						}						
+						}
 						
 					}
 				}
@@ -284,7 +290,7 @@ void GetPartData(int m_partIndex, int& m_line, String &m_val, int &m_offset)
 	{
 		m_line = 4;
 		m_val = "Rp: " + m_val;
-	}	
+	}
 }
 
 void UpdateInputValues()
@@ -300,15 +306,15 @@ void UpdateInputValues()
 
 void CheckForSendNewInput()
 {
-	bool m_potMeters = m_throttle.HasChangedSinceLastCheck() || 
-						m_flaps.HasChangedSinceLastCheck() || 
+	bool m_potMeters = m_throttle.HasChangedSinceLastCheck() ||
+						m_flaps.HasChangedSinceLastCheck() ||
 						m_ruder.HasChangedSinceLastCheck();
-						
+	
 	bool m_switches = m_parkingBreak.HasChangedSinceLastCheck() ||
-						m_carborator.HasChangedSinceLastCheck() || 
-						m_mixture.HasChangedSinceLastCheck() || 
+						m_carborator.HasChangedSinceLastCheck() ||
+						m_mixture.HasChangedSinceLastCheck() ||
 						m_landingLights.HasChangedSinceLastCheck();
-			        
+	
 	if (m_potMeters || m_switches)
 	{
 		PrintFloat(m_throttle.m_value, 3);
@@ -318,9 +324,9 @@ void CheckForSendNewInput()
 		PrintFloat(m_ruder.m_position, 3);
 		Serial.print(",");
 		Serial.print(m_carborator.m_value);
-		Serial.print(",");
-		//Serial.print(m_mixture.m_value);
 		//Serial.print(",");
+		//Serial.print(m_mixture.m_value);
+		Serial.print(",");
 		Serial.print(m_landingLights.m_value);
 		Serial.print(",");
 		Serial.print(m_parkingBreak.m_value); // parking brake itself
@@ -328,14 +334,14 @@ void CheckForSendNewInput()
 		Serial.print(m_parkingBreak.m_value); // left brake double, in this case either full or non
 		Serial.print(",");
 		Serial.print(m_parkingBreak.m_value); // right brake double, in this case either full or non
-				        
+		
 		Serial.print("\n");
-	}	
+	}
 }
 
 // Prints the float with the given precision
 void PrintFloat(float a_number, int a_decimals)
-{	
+{
 	int m_integerPart = (int)a_number;
 	Serial.print(m_integerPart);
 	Serial.print(".");
