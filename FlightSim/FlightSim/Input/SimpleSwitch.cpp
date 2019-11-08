@@ -14,6 +14,7 @@ SimpleSwitch::SimpleSwitch(int a_readPin, bool a_inverted, int a_pinMode)
 	this->m_readPin = a_readPin;
 	pinMode(this->m_readPin, a_pinMode);
 	this->m_inverted = a_inverted;
+	this->m_previousValue = 0;
 }
 
 // default destructor
@@ -36,10 +37,9 @@ void SimpleSwitch::Update()
 
 bool SimpleSwitch::HasChangedSinceLastCheck()
 {
-	static bool m_previousValue = 0;
-	if (this->m_value != m_previousValue)
+	if (this->m_value != this->m_previousValue)
 	{
-		m_previousValue = this->m_value;
+		this->m_previousValue = this->m_value;
 		return true;
 	}
 	else

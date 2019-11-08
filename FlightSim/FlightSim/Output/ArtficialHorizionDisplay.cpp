@@ -31,7 +31,7 @@ ArtficialHorizionDisplay::~ArtficialHorizionDisplay()
 
 int ArtficialHorizionDisplay::UpdateMeter()
 {
-	if (this->m_pitch > 0.05) // 0.05 is 18 degrees when normalized between 0 - 360
+	/*if (this->m_pitch > 0.05) // 0.05 is 18 degrees when normalized between 0 - 360
 		this->m_pitch = 0.05;
 	else if (this->m_pitch < -0.05)
 		this->m_pitch = -0.05;
@@ -41,17 +41,27 @@ int ArtficialHorizionDisplay::UpdateMeter()
 		this->m_rotation = 0.15;
 	else if (this->m_rotation < -0.15)
 		this->m_rotation = -0.15;
+		*/
+	if (this->m_pitch > 18)
+		this->m_pitch = 18;
+	if (this->m_pitch < -18)
+		this->m_pitch = -18;
 		
 		
-	bool m_pitch = UpdatePart(this->m_pitch * 360, this->m_pinPitchPot, this->m_pinPitchA, this->m_pinPitchB, -20, 20, 0);
-	bool m_roll = UpdatePart(this->m_rotation * 360, this->m_pinRollPot, this->m_pinRollA, this->m_pinRollB, -54, 54, 0);
+	if (this->m_rotation > 54)
+		this->m_rotation = 54;
+	if (this->m_rotation < -54)
+		this->m_rotation = -54;
+		
+	bool m_pitch = UpdatePart(this->m_pitch, this->m_pinPitchPot, this->m_pinPitchA, this->m_pinPitchB, -20, 20, 0);
+	bool m_roll = UpdatePart(this->m_rotation, this->m_pinRollPot, this->m_pinRollA, this->m_pinRollB, -54, 54, 0);
 	return (m_roll) ? 1 : 0;
 }
 
 bool ArtficialHorizionDisplay::UpdatePart(int a_degrees, int a_potPin, int a_pinA, int a_pinB, int a_minInput, int a_maxInput, int a_offset)
 {
 	// 500 op pot meter is middle
-	int m_shouldValueOnPot = map(a_degrees, a_minInput, a_maxInput, 1000, 0);
+	int m_shouldValueOnPot = map(a_degrees, a_minInput, a_maxInput, 0, 1000);
 	int m_potValue = analogRead(a_potPin);
 	int m_returnValue = 0;
 	bool m_inBelowRange = m_potValue + 7 >= m_shouldValueOnPot && m_potValue < m_shouldValueOnPot;

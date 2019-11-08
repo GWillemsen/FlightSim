@@ -15,16 +15,19 @@ class Flaps
 //variables
 public:
 	float m_position;
+	bool m_flapsEnabled;
 	int m_readPin;
+	int m_enablePin;
 	bool m_invertRead;
+	int m_lastRead;
 protected:
 private:
 
 //functions
 public:
-	Flaps(int a_readPin) : Flaps(a_readPin, false, INPUT) {}
-	Flaps(int a_readPin, bool a_invertRead) : Flaps(a_readPin, a_invertRead, INPUT) {}
-	Flaps(int a_readPin, bool a_invertRead, int a_pinMode);
+	Flaps(int a_readPin, int a_enablePin) : Flaps(a_readPin, a_enablePin, false, INPUT) {}
+	Flaps(int a_readPin, int a_enablePin, bool a_invertRead) : Flaps(a_readPin, a_enablePin, a_invertRead, INPUT) {}
+	Flaps(int a_readPin, int a_enablePin, bool a_invertRead, int a_pinMode);
 	~Flaps();
 	void Update();
 	bool HasChangedSinceLastCheck();

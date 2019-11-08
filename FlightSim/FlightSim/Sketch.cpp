@@ -1,18 +1,19 @@
-﻿#ifdef __AS7__
+﻿#include "ADFDisplay.h"
+#include "AltitudeDisplay.h"
+#include "ArtficialHorizionDisplay.h"
+#include "ClimbingDisplay.h"
+#include "HeadingDisplay.h"
+#include "RPMDisplay.h"
+#include "SpeedDisplay.h"
+#include "TurnSlipDisplay.h"
+#include "Flaps.h"
+#include "Ruder.h"
+#include "Throttle.h"
+#include "SimpleSwitch.h"
+#ifdef __AS7__
 #include <Arduino.h>
 #endif
 
-#include "Output/ADFDisplay.h"
-#include "Output/AltitudeDisplay.h"
-#include "Output/ArtficialHorizionDisplay.h"
-#include "Output/ClimbingDisplay.h"
-#include "Output/HeadingDisplay.h"
-#include "Output/RPMDisplay.h"
-#include "Output/SpeedDisplay.h"
-#include "Input/Flaps.h"
-#include "Input/Ruder.h"
-#include "Input/Throttle.h"
-#include "Input/SimpleSwitch.h"
 //#define USE_DISPLAY 1
 
 #ifdef USE_DISPLAY
@@ -35,25 +36,29 @@ void setup();
 
 // Display helpers (FlightGear outputs)
 ADFDisplay m_adfDisplay(0);
-AltitudeDisplay m_altitudeDisplay(1, 1, 1, 1, 20, 81); // fix the MS1, and MS2 pins
-ArtficialHorizionDisplay m_ahDisplay(1, 1, 1, 1, 7, 8); //13, 12, 7, 8);
-ClimbingDisplay m_climbingDisplay(3, 4, 63, 62, -1500, 1500);
+AltitudeDisplay m_altitudeDisplay(31, 32, 29, 30, 20, 81); // fix the MS1, and MS2 pins
+ArtficialHorizionDisplay m_ahDisplay(10, 11, 34, 35, 36, 37); //13, 12, 7, 8);
+ClimbingDisplay m_climbingDisplay(3, 4, 102, 97, -1500, 1500);
 HeadingDisplay m_headingDisplay(0);
-RPMDisplay m_rpmDisplay(5, 3000, 124);
-SpeedDisplay m_speedDisplay(2, 240, 108); // 220knots = 118
+RPMDisplay m_rpmDisplay(5, 3000, 195); // Bij 3.3V 195,
+SpeedDisplay m_speedDisplay(2, 240, 174);  // Bij 5V 108, bij 3.3  // 220knots = 118
+TurnSlipDisplay m_tunSlipDisplay(6, 7, 1000, 1000);
 
 // FlightGear inputs
-Flaps m_flaps(0);
-Throttle m_throttle(0);
-Ruder m_ruder(0);
+Flaps m_flaps(8, 26);
+Throttle m_throttle(9);
+Ruder m_ruder(7);
 SimpleSwitch m_parkingBreak(25, false, INPUT_PULLUP);
+SimpleSwitch m_carborator(24, true, INPUT_PULLUP);
+SimpleSwitch m_mixture(22, false, INPUT_PULLUP);
+SimpleSwitch m_landingLights(27, false, INPUT_PULLUP);
 #ifdef USE_DISPLAY
 LiquidCrystal_I2C display(0x3F, 20, 4); // 0x27 or 0x3F
 #endif
-MeterBasis* m_meters[7];
+MeterBasis* m_meters[8];
 
 void setup() {
-	Serial.begin(19200);
+	Serial.begin(57600);
 	Serial.println("Starting INIT");
 	#if USE_DISPLAY
 	display.init();
@@ -63,6 +68,13 @@ void setup() {
 	#endif
 	SetupMeterArrays();
 	Serial.println("Starting loop");
+}
+
+void loop() {
+	UpdateInputValues();
+	CheckForSendNewInput();
+	ReadSerialData();
+	UpdateMeterValues();
 }
 
 void SetupMeterArrays()
@@ -75,6 +87,7 @@ void SetupMeterArrays()
 	m_meters[4] = &m_headingDisplay;
 	m_meters[5] = &m_rpmDisplay;
 	m_meters[6] = &m_speedDisplay;
+	m_meters[7] = &m_tunSlipDisplay;
 	Serial.println("Done");
 }
 
@@ -107,15 +120,6 @@ void UpdateMeterValues()
 			}
 		}
 	}	
-}
-
-
-void loop() {
-
-	UpdateInputValues();
-	CheckForSendNewInput();
-	ReadSerialData();
-	UpdateMeterValues();
 }
 
 void ReadSerialData()
@@ -179,7 +183,11 @@ void ProcessingInputLines(String &data)
 				else if (partIndex == 6)
 					toUpdateField = &m_adfDisplay.m_heading;
 				else if(partIndex == 7)
-					toUpdateField = &m_rpmDisplay.m_rpms;					
+					toUpdateField = &m_rpmDisplay.m_rpms;
+				else if(partIndex == 8)					
+					toUpdateField = &m_tunSlipDisplay.m_slip;
+				else if(partIndex == 9)
+					toUpdateField = &m_tunSlipDisplay.m_turn;
 				
 				int nextSeparator = data.indexOf(",", m_startPos);
 				// if the input is terminated or a next line is also available
@@ -278,34 +286,51 @@ void GetPartData(int m_partIndex, int& m_line, String &m_val, int &m_offset)
 		m_val = "Rp: " + m_val;
 	}	
 }
+
 void UpdateInputValues()
 {
-	m_flaps->Update();
-	m_throttle->Update();
-	m_ruder->Update();
-	m_parkingBreak->Update();
+	m_flaps.Update();
+	m_throttle.Update();
+	m_ruder.Update();
+	m_parkingBreak.Update();
+	m_carborator.Update();
+	m_mixture.Update();
+	m_landingLights.Update();
 }
 
 void CheckForSendNewInput()
 {
-	if (m_flaps->HasChangedSinceLastCheck() ||
-		m_throttle->HasChangedSinceLastCheck() ||
-		m_ruder->HasChangedSinceLastCheck() ||
-		m_parkingBreak->HasChangedSinceLastCheck())
-		{
-			PrintFloat(m_throttle->m_value, 4);
-			Serial.print(",");
-			Serial.print(m_parkingBreak->m_value); // parking brake itself
-			Serial.print(",");
-			Serial.print(m_parkingBreak->m_value); // left brake double, in this case either full or non
-			Serial.print(",");
-			Serial.print(m_parkingBreak->m_value); // right brake double, in this case either full or non
-			Serial.print(",");
-			PrintFloat(m_flaps->m_position, 4);
-			Serial.print(",");
-			PrintFloat(m_ruder->m_position, 4);
-			Serial.print("\n");
-		}	
+	bool m_potMeters = m_throttle.HasChangedSinceLastCheck() || 
+						m_flaps.HasChangedSinceLastCheck() || 
+						m_ruder.HasChangedSinceLastCheck();
+						
+	bool m_switches = m_parkingBreak.HasChangedSinceLastCheck() ||
+						m_carborator.HasChangedSinceLastCheck() || 
+						m_mixture.HasChangedSinceLastCheck() || 
+						m_landingLights.HasChangedSinceLastCheck();
+			        
+	if (m_potMeters || m_switches)
+	{
+		PrintFloat(m_throttle.m_value, 3);
+		Serial.print(",");
+		PrintFloat(m_flaps.m_position, 2);
+		Serial.print(",");
+		PrintFloat(m_ruder.m_position, 3);
+		Serial.print(",");
+		Serial.print(m_carborator.m_value);
+		Serial.print(",");
+		//Serial.print(m_mixture.m_value);
+		//Serial.print(",");
+		Serial.print(m_landingLights.m_value);
+		Serial.print(",");
+		Serial.print(m_parkingBreak.m_value); // parking brake itself
+		Serial.print(",");
+		Serial.print(m_parkingBreak.m_value); // left brake double, in this case either full or non
+		Serial.print(",");
+		Serial.print(m_parkingBreak.m_value); // right brake double, in this case either full or non
+				        
+		Serial.print("\n");
+	}	
 }
 
 // Prints the float with the given precision

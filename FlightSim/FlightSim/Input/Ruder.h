@@ -17,6 +17,8 @@ public:
 	float m_position;
 	int m_readPin;
 	bool m_invertRead;
+	int m_lastRead;
+	float m_previousValue;
 protected:
 private:
 

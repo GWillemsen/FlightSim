@@ -28,12 +28,16 @@ void Ruder::Update()
 	{
 		m_readValue = 1024 - m_readValue;
 	}
-	this->m_position = m_readValue / 1024.0;
+	
+	if(m_readValue > this->m_lastRead + 5 || m_readValue < this->m_lastRead - 5)
+	{
+		this->m_lastRead = m_readValue;
+		this->m_position = m_readValue / 1024.0;
+	}
 }
 
 bool Ruder::HasChangedSinceLastCheck()
 {
-	static float m_previousValue = 0;
 	if (this->m_position != m_previousValue)
 	{
 		m_previousValue = this->m_position;

@@ -17,6 +17,7 @@ public:
 	bool m_value;
 	int m_readPin;
 	bool m_inverted;
+	bool m_previousValue;
 protected:
 private:
 

@@ -15,6 +15,31 @@
 				<type>float</type>
 			</chunk>
 			<chunk>
+				<name>Flaps</name>
+				<node>/controls/flight/flaps</node>
+				<type>float</type>
+			</chunk>
+			<chunk>
+				<name>Ruder</name>
+				<node>/controls/flight/rudder</node>
+				<type>float</type>
+			</chunk>
+			<chunk>
+				<name>Carborator</name>
+				<node>/controls/engines/current-engine/carb-heat</node>
+				<type>bool</type>
+			</chunk>
+			<!--<chunk>
+				<name>Fuel mixuture</name>
+				<node>/controls/engines/current-engine/mixture</node>
+				<type>float</type>
+			</chunk>-->
+			<chunk>
+				<name>Landing lights</name>
+				<node>/controls/lighting/landing-lights</node>
+				<type>bool</type>
+			</chunk>
+			<chunk>
 				<name>ParkingBrake</name>
 				<node>/controls/gear/brake-parking</node>
 				<type>bool</type>
@@ -27,16 +52,6 @@
 			<chunk>
 				<name>RightWheelBrake</name>
 				<node>/controls/gear/brake-right</node>
-				<type>float</type>
-			</chunk>
-			<chunk>
-				<name>Flaps</name>
-				<node>/controls/flight/flaps</node>
-				<type>float</type>
-			</chunk>
-			<chunk>
-				<name>Ruder</name>
-				<node>/controls/flight/rudder</node>
 				<type>float</type>
 			</chunk>
 		</input>
@@ -92,6 +107,18 @@
 				<format>%.0f</format>
 				<type>float</type>
 				<node>/engines/engine/rpm</node>
+			</chunk>
+			<chunk>
+				<name>SlipSkid (horizonal ball)</name>
+				<format>%.0f</format>
+				<type>float</type>
+				<node>/instrumentation/slip-skid-ball/indicated-slip-skip</node>
+			</chunk>
+			<chunk>
+				<name>Turn indicator (pointer)</name>
+				<format>%.0f</format>
+				<type>float</type>
+				<node>/instrumentation/turn-indicator/indicated-turn-rate</node>
 			</chunk>
 		</output>
 	</generic>

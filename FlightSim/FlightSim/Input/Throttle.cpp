@@ -28,15 +28,18 @@ void Throttle::Update()
 	{
 		m_readValue = 1024 - m_readValue;
 	}
-	this->m_value = m_readValue / 1024.0;
+	if(m_readValue > this->m_lastRead + 5 || m_readValue < this->m_lastRead - 5)
+	{
+		this->m_lastRead = m_readValue;
+		this->m_value = m_readValue / 1024.0;
+	}
 }
 
 bool Throttle::HasChangedSinceLastCheck()
 {
-	static float m_previousValue = 0;
-	if (this->m_value != m_previousValue)
+	if (this->m_value != this->m_previousValue)
 	{
-		m_previousValue = this->m_value;
+		this->m_previousValue = this->m_value;
 		return true;
 	}
 	else
