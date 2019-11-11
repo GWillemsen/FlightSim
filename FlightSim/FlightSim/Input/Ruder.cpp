@@ -28,8 +28,7 @@ void Ruder::Update()
 	{
 		m_readValue = 1024 - m_readValue;
 	}
-	Serial.println(m_readValue);
-	
+	  
 	int in_min = 360;
 	int in_max = 620;
 	int out_max = 1;
@@ -38,12 +37,10 @@ void Ruder::Update()
 		m_readValue = in_min;
 	else if (m_readValue > in_max)
 		m_readValue = in_max;
-	this->m_position = ((float)m_readValue - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-	Serial.println(this->m_position);
 	if(m_readValue > this->m_lastRead + 5 || m_readValue < this->m_lastRead - 5)
 	{
 		this->m_lastRead = m_readValue;
-		//this->m_position = m_readValue / 1024.0;
+		this->m_position = ((float)m_readValue - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 }
 

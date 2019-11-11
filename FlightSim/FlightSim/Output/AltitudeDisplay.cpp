@@ -52,10 +52,6 @@ int AltitudeDisplay::UpdateMeter()
 		m_directionIsUp = true;
 	}
 	
-	Serial.print(m_calcHeight);
-	Serial.print(" ");
-	Serial.println(m_stepsFromZero);
-	
 	if (m_heightDiff > this->m_minHeightDiffBeforeMoving)
 	{
 		int m_millisDif = millis() - m_lastMillis;

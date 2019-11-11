@@ -38,11 +38,11 @@ void setup();
 ADFDisplay m_adfDisplay(0);
 AltitudeDisplay m_altitudeDisplay(31, 32, 29, 30, 20, 20); // fix the MS1, and MS2 pins
 ArtficialHorizionDisplay m_ahDisplay(10, 11, 34, 35, 36, 37); //13, 12, 7, 8);
-ClimbingDisplay m_climbingDisplay(3, 4, 102, 97, -1500, 1500);
+ClimbingDisplay m_climbingDisplay(3, 4, 102, 97, -1500, 1500); // Bij 5V 63 & 62, Bij 3.3V 102, 97
 HeadingDisplay m_headingDisplay(0);
 RPMDisplay m_rpmDisplay(5, 3000, 195); // Bij 3.3V 195,
-SpeedDisplay m_speedDisplay(2, 240, 174);  // Bij 5V 108, bij 3.3  // 220knots = 118
-TurnSlipDisplay m_tunSlipDisplay(6, 7, 1000, 1000);
+SpeedDisplay m_speedDisplay(2, 240, 174);  // Bij 5V 108, bij 3.3V 174  // 220knots = 118
+TurnSlipDisplay m_tunSlipDisplay(6, 7, 1000, 1000); // not used, not enough time
 
 // FlightGear inputs
 Flaps m_flaps(8, 26);
@@ -342,11 +342,19 @@ void CheckForSendNewInput()
 // Prints the float with the given precision
 void PrintFloat(float a_number, int a_decimals)
 {
-	int m_integerPart = (int)a_number;
+	int m_integerPart = (int)a_number;	
+	
+	if (a_number < 0 && a_number > -1)
+	{
+		Serial.print("-");
+		a_number = -a_number;
+	}
 	Serial.print(m_integerPart);
 	Serial.print(".");
+	
 	float m_decimal_part = a_number - ((int)a_number);
 	m_decimal_part = m_decimal_part * 10;
+	
 	String m_data = (String)m_integerPart;
 	while(a_decimals > 0)
 	{
