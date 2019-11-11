@@ -3,31 +3,16 @@
 	<generic>
 	<!-- 
 	Notes:
-		Names are purely astetics so you have extra info about the value. The name is not send with the output/input.
+		Names are purely aesthetics so you have extra info about the value. The name is not send with the output/input.
 		All floats are normalized between -1 and 1 if not otherwise specified.
 	-->
 		<input>
-			<line_separator>newline</line_separator>
+			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<chunk>
 				<name>Throttle</name>
 				<node>/controls/engines/current-engine/throttle</node>
 				<type>float</type>
-			</chunk>
-			<chunk>
-				<name>ParkingBrake</name>
-				<node>/controls/gear/brake-parking</node>
-				<type>bool</type>
-			</chunk>
-			<chunk>
-				<name>LeftWheelBrake</name>
-				<node>/controls/gear/brake-left</node>
-				<type>bool</type>
-			</chunk>
-			<chunk>
-				<name>RightWheelBrake</name>
-				<node>/controls/gear/brake-right</node>
-				<type>bool</type>
 			</chunk>
 			<chunk>
 				<name>Flaps</name>
@@ -39,49 +24,101 @@
 				<node>/controls/flight/rudder</node>
 				<type>float</type>
 			</chunk>
+			<chunk>
+				<name>Carborator</name>
+				<node>/controls/engines/current-engine/carb-heat</node>
+				<type>bool</type>
+			</chunk>
+			<!--<chunk>
+				<name>Fuel mixuture</name>
+				<node>/controls/engines/current-engine/mixture</node>
+				<type>float</type>
+			</chunk>-->
+			<chunk>
+				<name>Landing lights</name>
+				<node>/controls/lighting/landing-lights</node>
+				<type>bool</type>
+			</chunk>
+			<chunk>
+				<name>ParkingBrake</name>
+				<node>/controls/gear/brake-parking</node>
+				<type>bool</type>
+			</chunk>
+			<chunk>
+				<name>LeftWheelBrake</name>
+				<node>/controls/gear/brake-left</node>
+				<type>float</type>
+			</chunk>
+			<chunk>
+				<name>RightWheelBrake</name>
+				<node>/controls/gear/brake-right</node>
+				<type>float</type>
+			</chunk>
 		</input>
 		<output>
-			<line_separator>newline</line_separator>
+			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<binary_mode>false</binary_mode>
+			<!-- %d (interger format) is the default formatting, %5.3F means that it formats it as a floating point with 3 decimals and 5 integers -->
 			<chunk>
 				<name>Speed</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/airspeed-indicator/indicated-speed-kt</node>
 			</chunk>
 			<chunk>
 				<name>AHroll</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.2f</format>
 				<node>/instrumentation/attitude-indicator/indicated-roll-deg</node>
 			</chunk>
 			<chunk>
 				<name>AHpitch</name>
-				<format>%f</format>
-				<node>/instrumentation/attitude-indicator/indicated-roll-deg</node>
+				<type>float</type>
+				<format>%.2f</format>
+				<node>/instrumentation/attitude-indicator/indicated-pitch-deg</node>
 			</chunk>
 			<chunk>
 				<name>Heading</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/heading-indicator/indicated-heading-deg</node>
 			</chunk>
 			<chunk>
 				<name>Altitude</name>
-				<format>%f</format>
+				<type>float</type>
+				<format>%.0f</format>
 				<node>/instrumentation/altimeter/indicated-altitude-ft</node>
 			</chunk>
 			<chunk>
 				<name>Climbing</name>
-				<format>%f</format>
-				<node>/instrumentation/vertical-speed-indicator/indicated-speed-mps</node>
+				<type>float</type>
+				<format>%.1f</format>
+				<node>/instrumentation/vertical-speed-indicator/indicated-speed-fpm</node>
 			</chunk>
 			<chunk>
 				<name>ADF</name>
-				<format>%f</format>
+				<format>%.2f</format>
+				<type>float</type>
 				<node>/instrumentation/adf/indicated-bearing-deg</node>
 			</chunk>
 			<chunk>
 				<name>EngineRPM</name>
+				<format>%.0f</format>
+				<type>float</type>
 				<node>/engines/engine/rpm</node>
+			</chunk>
+			<chunk>
+				<name>SlipSkid (horizonal ball)</name>
+				<format>%.0f</format>
+				<type>float</type>
+				<node>/instrumentation/slip-skid-ball/indicated-slip-skip</node>
+			</chunk>
+			<chunk>
+				<name>Turn indicator (pointer)</name>
+				<format>%.0f</format>
+				<type>float</type>
+				<node>/instrumentation/turn-indicator/indicated-turn-rate</node>
 			</chunk>
 		</output>
 	</generic>
