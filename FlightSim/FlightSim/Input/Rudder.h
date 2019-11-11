@@ -10,7 +10,7 @@
 #define __RUDER_H__
 #include "Arduino.h"
 
-class Ruder
+class Rudder
 {
 //variables
 public:
@@ -24,10 +24,10 @@ private:
 
 //functions
 public:
-	Ruder(int a_readPin) : Ruder (a_readPin, false, INPUT) {}
-	Ruder(int a_readPin, bool a_invertRead) : Ruder(a_readPin, a_invertRead, INPUT) {}
-	Ruder(int a_readPin, bool a_invertRead, int a_pinMode);
-	~Ruder();
+	Rudder(int a_readPin) : Rudder (a_readPin, false, INPUT) {}
+	Rudder(int a_readPin, bool a_invertRead) : Rudder(a_readPin, a_invertRead, INPUT) {}
+	Rudder(int a_readPin, bool a_invertRead, int a_pinMode);
+	~Rudder();
 	void Update();
 	bool HasChangedSinceLastCheck();
 protected:
