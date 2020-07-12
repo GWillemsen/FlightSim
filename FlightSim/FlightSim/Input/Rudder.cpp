@@ -6,10 +6,10 @@
 */
 
 
-#include "Ruder.h"
+#include "Rudder.h"
 #include "Arduino.h"
 
-Ruder::Ruder(int a_readPin, bool a_invertRead, int a_pinMode)
+Rudder::Rudder(int a_readPin, bool a_invertRead, int a_pinMode)
 {
 	this->m_readPin = a_readPin;
 	pinMode(this->m_readPin, a_pinMode);
@@ -17,11 +17,11 @@ Ruder::Ruder(int a_readPin, bool a_invertRead, int a_pinMode)
 } //Ruder
 
 // default destructor
-Ruder::~Ruder()
+Rudder::~Rudder()
 {
 } //~Ruder
 
-void Ruder::Update()
+void Rudder::Update()
 {
 	int m_readValue = (int)analogRead(this->m_readPin);
 	if (this->m_invertRead)
@@ -44,7 +44,7 @@ void Ruder::Update()
 	}
 }
 
-bool Ruder::HasChangedSinceLastCheck()
+bool Rudder::HasChangedSinceLastCheck()
 {
 	if (this->m_position != m_previousValue)
 	{

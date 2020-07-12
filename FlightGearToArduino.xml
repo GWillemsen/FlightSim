@@ -20,7 +20,7 @@
 				<type>float</type>
 			</chunk>
 			<chunk>
-				<name>Ruder</name>
+				<name>Rudder</name>
 				<node>/controls/flight/rudder</node>
 				<type>float</type>
 			</chunk>

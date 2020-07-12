@@ -7,7 +7,7 @@
 #include "SpeedDisplay.h"
 #include "TurnSlipDisplay.h"
 #include "Flaps.h"
-#include "Ruder.h"
+#include "Rudder.h"
 #include "Throttle.h"
 #include "SimpleSwitch.h"
 #ifdef __AS7__
@@ -47,7 +47,7 @@ TurnSlipDisplay m_tunSlipDisplay(6, 7, 1000, 1000); // not used, not enough time
 // FlightGear inputs
 Flaps m_flaps(8, 26);
 Throttle m_throttle(9);
-Ruder m_ruder(7);
+Rudder m_rudder(7);
 SimpleSwitch m_parkingBreak(25, false, INPUT_PULLUP);
 SimpleSwitch m_carborator(24, true, INPUT_PULLUP);
 SimpleSwitch m_mixture(22, false, INPUT_PULLUP);
@@ -297,7 +297,7 @@ void UpdateInputValues()
 {
 	m_flaps.Update();
 	m_throttle.Update();
-	m_ruder.Update();
+	m_rudder.Update();
 	m_parkingBreak.Update();
 	m_carborator.Update();
 	m_mixture.Update();
@@ -308,7 +308,7 @@ void CheckForSendNewInput()
 {
 	bool m_potMeters = m_throttle.HasChangedSinceLastCheck() ||
 						m_flaps.HasChangedSinceLastCheck() ||
-						m_ruder.HasChangedSinceLastCheck();
+						m_rudder.HasChangedSinceLastCheck();
 	
 	bool m_switches = m_parkingBreak.HasChangedSinceLastCheck() ||
 						m_carborator.HasChangedSinceLastCheck() ||
@@ -321,7 +321,7 @@ void CheckForSendNewInput()
 		Serial.print(",");
 		PrintFloat(m_flaps.m_position, 2);
 		Serial.print(",");
-		PrintFloat(m_ruder.m_position, 3);
+		PrintFloat(m_rudder.m_position, 3);
 		Serial.print(",");
 		Serial.print(m_carborator.m_value);
 		//Serial.print(",");
