@@ -7,6 +7,7 @@
 		All floats are normalized between -1 and 1 if not otherwise specified.
 	-->
 		<input>
+			<!-- Using printf formatting style. -->
 			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<chunk>
@@ -59,7 +60,7 @@
 			<line_separator>#</line_separator>
 			<var_separator>,</var_separator>
 			<binary_mode>false</binary_mode>
-			<!-- %d (interger format) is the default formatting, %5.3F means that it formats it as a floating point with 3 decimals and 5 integers -->
+			<!-- %d (integer format) is the default formatting. Using printf formatting style. -->
 			<chunk>
 				<name>Speed</name>
 				<type>float</type>
@@ -109,7 +110,7 @@
 				<node>/engines/engine/rpm</node>
 			</chunk>
 			<chunk>
-				<name>SlipSkid (horizonal ball)</name>
+				<name>SlipSkid (horizontal ball)</name>
 				<format>%.0f</format>
 				<type>float</type>
 				<node>/instrumentation/slip-skid-ball/indicated-slip-skip</node>
